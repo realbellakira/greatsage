@@ -16,11 +16,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     const sageGroups = await getSages()
-    sageGroups.filter(([updated]) => updated).forEach(([, sages]) => {
-        pusher.trigger('sage', 'new', {
-            message: sages[0],
-        })
-    })
+
+    sageGroups.forEach(([sages]) => sages.forEach(sage => pusher.trigger('sage', 'new', {
+        message: sage,
+    })))
     const value = (sageGroups
         .map(([, sages]) => sages)
         .reduce((r, sages) => r.concat(sages), [])

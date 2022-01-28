@@ -1,4 +1,4 @@
-<a href="https://greatsage.vercel.app"><img src="https://greatsage.vercel.app/bella_iknowthis.webp?sanitize=true" height="150" align="right"></a>
+<a href="https://greatsage.vercel.app"><img src="https://greatsage.vercel.app/bella_iknowthis.webp?sanitize=true" height="150" align="left"></a>
 
 # Great Sage
 
