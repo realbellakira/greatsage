@@ -38,7 +38,5 @@ async function getSages () {
 }
 
 async function getLatestSagesFromRedis () {
-    return useRedis(async client => {
-        return Promise.all(BILIBILI_UIDS.map(getLatestSagesFromRedisByID(client)))
-    })
+    return useRedis(async client => Promise.all(BILIBILI_UIDS.map(getLatestSagesFromRedisByID(client))))
 }
