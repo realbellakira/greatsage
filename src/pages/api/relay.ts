@@ -3,7 +3,7 @@ import Pusher from 'pusher'
 
 import {PUSHER_APPID, PUSHER_KEY, PUSHER_SECRET, PUSHER_CLUSTER, BILIBILI_UIDS} from 'src/libs/settings'
 import useRedis from 'src/libs/redis'
-import {getLatestSagesFromRedisByID} from 'src/libs/sage'
+import {getLatestSagesFromRedisByID} from 'src/libs/sageredis'
 
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,11 +16,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
 
     const sageGroups = await getSages()
-    sageGroups.filter(([updated]) => updated).forEach(([, sages]) => {
-        pusher.trigger('sage', 'new', {
-            message: sages[0],
-        })
-    })
+
+    sageGroups.forEach(([sages]) => sages.forEach(sage => pusher.trigger('sage', 'new', {
+        message: sage,
+    })))
     const value = (sageGroups
         .map(([, sages]) => sages)
         .reduce((r, sages) => r.concat(sages), [])
@@ -39,7 +38,5 @@ async function getSages () {
 }
 
 async function getLatestSagesFromRedis () {
-    return useRedis(async client => {
-        return Promise.all(BILIBILI_UIDS.map(getLatestSagesFromRedisByID(client)))
-    })
+    return useRedis(async client => Promise.all(BILIBILI_UIDS.map(getLatestSagesFromRedisByID(client))))
 }

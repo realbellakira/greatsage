@@ -12,37 +12,53 @@ export async function getLastestBilibiliSagesByUID (uid: string, takeNumber: num
 /**
  * @document
  * <https://github.com/SocialSisterYi/bilibili-API-collect/blob/a7a743dffdb0e22ef735a8639dd3c3ead82665e4/dynamic/get_dynamic_detail.md>
+ *
+ * To see what it looks like
+ * http://api.vc.bilibili.com/dynamic_svr/v1/dynamic_svr/get_dynamic_detail?dynamic_id=[dynamic_id]
+ * Or fully JSON parsed
+ * http://localhost:3000/api/dynamic?dynamic_id=[dynamic_id]
  */
 function serializeBilibiliSage (rawSage: ANY): ISage {
-    // TODO: @sy implement this
     rawSage.card = JSON.parse(rawSage.card)
     if (rawSage.card.origin) {
         rawSage.card.origin = JSON.parse(rawSage.card.origin)
     }
 
     const id = rawSage.desc.dynamic_id_str
+    const url = `https://t.bilibili.com/${id}`
     const timestamp = rawSage.desc.timestamp
-    const type = serializeBilibiliSageType(rawSage)
-    const originSage = rawSage.card.origin ? serializeBilibiliOriginSage(rawSage) : undefined
 
     return {
         id,
-        url: `https://t.bilibili.com/${id}`,
+        url,
         timestamp,
+        type: serializeBilibiliSageType(rawSage),
         user: serializeBilibiliSageUser(rawSage),
-        stats: {
-            repost: rawSage.desc.repost,
-            like: rawSage.desc.like,
-            comment: rawSage.desc.comment,
-        },
-        type,
+        stats: serializeBilibiliSageStats(rawSage),
         content: serializeBilibiliSageContent(rawSage),
-        originSage,
+        originSage: serializeBilibiliOriginSage(rawSage),
+    } as ISage
+}
+
+function serializeBilibiliSageStats (rawSage: ANY): ISage['stats'] {
+    const type = serializeBilibiliSageType(rawSage)
+    const {repost, like} = rawSage.desc
+    const comment = type === 'video'
+        ? rawSage.card.stat.reply
+        : type === 'article'
+            ? rawSage.card.stats.reply
+            : rawSage.desc.comment
+
+    return {
+        repost,
+        like,
+        comment,
     }
 }
 
 function serializeBilibiliSageType (rawSage: ANY): ISage['type'] {
-    const {type} = rawSage.desc
+    const type = rawSage.type || rawSage.desc.type
+
     if (type === 1) return 'repost'
     if (type === 2) return 'image'
     if (type === 4) return 'text'
@@ -53,12 +69,17 @@ function serializeBilibiliSageType (rawSage: ANY): ISage['type'] {
     return 'text'
 }
 
-function serializeBilibiliSageContent (rawSage: ANY): object { // TODO: @sy implement this
+function serializeBilibiliSageContent (rawSage: ANY): ISage['content'] {
     const type = serializeBilibiliSageType(rawSage)
-    const item = rawSage.card.item
-    // pictures = (rawSage.card.pictures || []).map((p: ANY) => p.img_src)
+    const card = rawSage.card
 
-    if (type === 'repost') return { // TODO: @sy serialize reposted content
+    return serializeBilibiliSageCard(type, card)
+}
+
+function serializeBilibiliSageCard (type: ISage['type'], card: ANY): ISage['content'] {
+    const item = card.item
+
+    if (type === 'repost') return {
         content: item.content,
     }
     if (type === 'text') return {
@@ -66,48 +87,72 @@ function serializeBilibiliSageContent (rawSage: ANY): object { // TODO: @sy impl
     }
     if (type === 'image') return {
         content: item.description,
-        pictures: item.pictures.map((p: ANY) => p.image_src),
+        pictures: item.pictures.map((p: ANY) => p.img_src),
     }
-    if (type === 'video') return { // TODO: @sy serialize video content
-        //
+    if (type === 'video') return {
+        title: card.title,
+        description: card.desc,
+        dynamic: card.dynamic,
+        picture: card.pic,
+        url: card.short_link,
+        duration: card.duration,
+        stats: {
+            view: card.stat.view,
+            danmaku: card.stat.danmaku,
+            like: card.stat.like,
+            coin: card.stat.coin,
+        },
     }
 
-    return {}
+    return {
+        url: `https://www.bilibili.com/read/cv${card.id}`,
+        title: card.title,
+        content: card.summary,
+        pictures: card.image_urls,
+    }
 }
 
-function serializeBilibiliOriginSage (rawSage: ANY): ISage {
-    const origin = rawSage.desc.origin
-    const id = origin.dynamic_id_str
+function serializeBilibiliOriginSage (rawSage: ANY): ISage['originSage'] {
+    // TODO: @sy reposted reposted sage
+    if (!rawSage.card.origin) return
+
+    const originDesc = rawSage.desc.origin
+    const originCard = rawSage.card.origin
+    const id = originDesc.dynamic_id_str
 
     return {
         id,
         url: `https://t.bilibili.com/${id}`,
-        timestamp: origin.timestamp,
+        timestamp: originDesc.timestamp,
         user: serializeBilibiliOriginSageUser(rawSage),
         stats: {
-            repost: 0,
-            like: 0,
-            comment: 0,
+            repost: originDesc.repost,
+            like: originDesc.like,
+            comment: originCard.stat?.comment || originCard.stat?.reply || originCard.stats?.reply,
         },
-        type: 'repost', // TODO: @sy serialize reposted content
-        content: { // TODO: @sy serialize reposted content
-            content: origin.description,
-            pictures: (origin.pictures || []).map((p: ANY) => p.img_src),
-        },
+        type: serializeBilibiliSageType(originDesc),
+        content: serializeBilibiliOriginSageContent(rawSage),
     }
 }
 
+function serializeBilibiliOriginSageContent (rawSage: ANY): ISage['content'] {
+    const type = serializeBilibiliSageType(rawSage.desc.origin)
+    const card = rawSage.card.origin
+    return serializeBilibiliSageCard(type, card)
+}
+
 function serializeBilibiliSageUser (rawSage: ANY): ISageUser {
-    const decorateCard = rawSage.desc.user_profile.decorate_card && {
-        card: rawSage.desc.user_profile.decorate_card.card_url,
-        number: rawSage.desc.user_profile.decorate_card.fan.num_desc,
-        color: rawSage.desc.user_profile.decorate_card.fan.color,
-        url: rawSage.desc.user_profile.decorate_card.jump_url,
+    const userProfile = rawSage.desc.user_profile
+    const decorateCard = userProfile.decorate_card && {
+        card: userProfile.decorate_card.card_url,
+        number: userProfile.decorate_card.fan?.num_desc,
+        color: userProfile.decorate_card.fan?.color,
+        url: userProfile.decorate_card.jump_url,
     }
 
     return {
         decorateCard,
-        ...serializeBilibiliSageInfoUser(rawSage.desc.user_profile),
+        ...serializeBilibiliSageInfoUser(userProfile),
     }
 }
 

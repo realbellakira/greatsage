@@ -1,10 +1,10 @@
-<a href="https://greatsage.vercel.app"><img src="https://greatsage.vercel.app/bella_iknowthis.webp?sanitize=true" height="150" align="right"></a>
+<a href="https://greatsage.vercel.app"><img src="https://greatsage.vercel.app/bella_iknowthis.webp?sanitize=true" height="150" align="left"></a>
 
 # Great Sage
 
-动机是[luooooob/vscode-asoul-notifications](https://github.com/luooooob/vscode-asoul-notifications)客户端主动爬取数据的性能问题。为了解决这个问题顺便写了一个自动更新的成员动态页面。
+动机是[luooooob/vscode-asoul-notifications](https://github.com/luooooob/vscode-asoul-notifications)客户端主动爬取数据的性能问题。
 
-于是有了本项目，一个以全免费云服务为前提开发的B站up主动态跟踪工具，解决B站这种无法分组动态以及没有webhook用于第三方实现动态推送的问题。
+于是有了本项目，一个以全免费云服务为前提开发的B站up主动态跟踪工具，解决B站这种无法分组动态以及没有webhook用于第三方实现动态推送的问题。为了解决这个问题顺便写了一个自动更新的成员动态页面。
 
 我也不知道B站那个关注分组的意义何在，怎么看怎么像半成品，该不会是“产能不足”吧？叔叔你米都自己洽了是吗？
 
@@ -33,7 +33,8 @@ BILIBILI_UIDS=672353429,351609538
 
 ## The Free Services Tier
 
-- Github, Vercel, Checkly
+- Github, Vercel
+- Checkly: 50k API checks per month(almost 1req/min)
 - Pusher: 200k messages per day, 100 connections
 - Redis Cloud: 30Mb, 30 connections
 

@@ -5,21 +5,31 @@ import {useEffect} from 'react'
 import {PUSHER_KEY} from 'src/libs/settings'
 
 
-export default function usePusher () {
+type IEventType = 'new'
+
+type IEventHandler = ({event, data}: {
+    event: IEventType
+    data: ANY
+}) => void
+
+export default function usePusher (onMessage: IEventHandler) {
     useEffect(() => {
-        Pusher.logToConsole = true
+        Pusher.logToConsole = !true
 
         const pusher = new Pusher(PUSHER_KEY, {
             cluster: 'mt1',
         })
 
         const channel = pusher.subscribe('sage')
-        channel.bind('new', (data: ANY) => {
-            alert(JSON.stringify(data))
-        })
+
+        channel.bind('new', (data: ANY) => onMessage({
+            event: 'new',
+            data,
+        }))
 
         return () => {
-            pusher.unbind_all()
+            pusher.unbind()
+            pusher.disconnect()
         }
     }, [])
 }

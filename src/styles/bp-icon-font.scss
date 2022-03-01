@@ -1,0 +1,51 @@
+@font-face {
+  font-family: "bp-icon-font";
+  src: url("/bp-icon-font.woff") format("woff");
+}
+
+.bp-icon-font {
+  font-family: "bp-icon-font" !important;
+  font-size: 14px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+
+  @mixin icon($name, $content) {
+    &.icon-#{$name}::before {
+      content: $content;
+    }
+  }
+  @include icon(add, "\E001");
+  @include icon(triangle-left, "\E002");
+
+  @include icon(btn-triangle-right, "\E003");
+  @include icon(close, "\E004");
+  @include icon(danmu-a, "\E005");
+  @include icon(emoji-btn, "\E006");
+  @include icon(gantan-01, "\E007");
+  @include icon(good, "\E008");
+  @include icon(group-dynamic, "\E009");
+  @include icon(ic_timer, "\E00A");
+  @include icon(info-circle, "\E00B");
+  @include icon(information_warning, "\E00C");
+  @include icon(jinz-01, "\E00D");
+  @include icon(left-r-dynamic, "\E00E");
+  @include icon(link, "\E00F");
+  @include icon(lottery-btn, "\E010");
+  @include icon(more-1, "\E011");
+  @include icon(pic-btn, "\E012");
+  @include icon(play-a, "\E013");
+  @include icon(right-r-dynamic, "\E014");
+  @include icon(routine_processing, "\E015");
+  @include icon(sq-dynamic, "\E016");
+  @include icon(ss-dynamic, "\E017");
+  @include icon(top, "\E018");
+  @include icon(topic, "\E019");
+  @include icon(vote-btn, "\E01A");
+  @include icon(vote-create-btn, "\E01B");
+
+  &.icon-bp-icon-font.html::before {
+    content: "\E01C";
+  }
+}
