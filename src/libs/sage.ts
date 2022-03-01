@@ -5,26 +5,74 @@
  * If we meet storage short, it saves a lot of space to erase all of them except uid.
  */
 
-import {createClient} from 'redis'
 
-import {getWithFrequencyLimit, setWithFrequencyLimit} from './redis'
-import {SAGE_FREQUENCY_IN_SECONDS} from './settings'
-import {getLastestBilibiliSagesByUID} from './sagebilibili'
+export type ISage = IRepostSage | ITextSage | IImageSage | IVideoSage | IArticleSage
 
-
-export interface ISage {
+interface IBaseSage {
     id: string
     url: string
     user: ISageUser
     timestamp: number
-    type: 'repost' | 'text' | 'image' | 'video' | 'article' // TODO: @sy strict type for type&content
+    type: 'repost' | 'text' | 'image' | 'video' | 'article'
     stats: {
         repost: number
         like: number
         comment: number
     }
     content: object
-    originSage?: ISage
+    originSage?: ANY // ISage // TODO: @sy
+}
+
+interface IRepostSage extends IBaseSage {
+    type: 'repost'
+    content: {
+        content: string
+    }
+    originSage: ISage
+}
+
+interface ITextSage extends IBaseSage {
+    type: 'text'
+    content: {
+        content: string
+    }
+}
+
+interface IImageSage extends IBaseSage {
+    type: 'image'
+    content: {
+        content: string
+        pictures: string[]
+    }
+}
+
+interface IVideoSage extends IBaseSage {
+    type: 'video'
+    content: {
+        title: string
+        description: string
+        dynamic: string
+        picture: string
+        url: string
+        /** @description seconds */
+        duration: number
+        stats: {
+            view: number
+            danmaku: number
+            like: number
+            coin: number
+        }
+    }
+}
+
+interface IArticleSage extends IBaseSage {
+    type: 'article'
+    content: {
+        url: string
+        title: string
+        content: string
+        pictures: string[]
+    }
 }
 
 export interface ISageUser {
@@ -36,24 +84,5 @@ export interface ISageUser {
         number: string
         color: string
         url: string
-    }
-}
-
-export function getLatestSagesFromRedisByID (client: ReturnType<typeof createClient>) {
-    return async (id: string): Promise<[ISage[], ISage[]]> => {
-        const bilibiliKey = `bilibili:${id}`
-        const [rawSages, locked] = await getWithFrequencyLimit(client, bilibiliKey)
-
-        let sages: ISage[] = JSON.parse(rawSages || '[]')
-        let updatedSages: ISage[] = []
-
-        if (!locked) {
-            const latestSages = [...sages]
-            sages = await getLastestBilibiliSagesByUID(id)
-            updatedSages = sages.filter(sage => !latestSages.find(latestSage => latestSage.id === sage.id))
-            await setWithFrequencyLimit(client, bilibiliKey, JSON.stringify(sages), SAGE_FREQUENCY_IN_SECONDS)
-        }
-
-        return [updatedSages, sages]
     }
 }

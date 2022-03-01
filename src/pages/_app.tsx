@@ -1,4 +1,5 @@
 
+import {StrictMode} from 'react'
 import Head from 'next/head'
 
 import 'src/styles/globals.scss'
@@ -6,7 +7,7 @@ import 'src/styles/globals.scss'
 
 export default function MyApp ({Component, pageProps}: ANY) {
     return (
-        <>
+        <StrictMode>
             <Head>
                 <title>大聪明</title>
                 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
@@ -23,6 +24,6 @@ export default function MyApp ({Component, pageProps}: ANY) {
                 <meta name="referrer" content="no-referrer" />
             </Head>
             <Component {...pageProps} />
-        </>
+        </StrictMode>
     )
 }

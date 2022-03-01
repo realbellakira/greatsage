@@ -1,5 +1,127 @@
-body {
-  h1 {
-    color: lightblue;
-  }
+html {
+  --color-fg-primary: #212121;
+  --color-fg: #333;
+  --color-fg-secondary: #666;
+  --color-fg-tertiary: #999;
 }
+
+html {
+  scroll-behavior: smooth;
+  background-color: #f4f5f7;
+  color: var(--color-fg);
+}
+
+* {
+  -webkit-text-size-adjust: none;
+}
+
+a,
+abbr,
+acronym,
+address,
+applet,
+article,
+aside,
+audio,
+b,
+big,
+blockquote,
+body,
+canvas,
+caption,
+center,
+cite,
+code,
+dd,
+del,
+details,
+dfn,
+div,
+dl,
+dt,
+em,
+embed,
+fieldset,
+figcaption,
+figure,
+footer,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+header,
+hgroup,
+html,
+i,
+iframe,
+img,
+ins,
+kbd,
+label,
+legend,
+li,
+mark,
+menu,
+nav,
+object,
+ol,
+output,
+p,
+pre,
+q,
+ruby,
+s,
+samp,
+section,
+small,
+span,
+strike,
+strong,
+sub,
+summary,
+sup,
+table,
+tbody,
+td,
+tfoot,
+th,
+thead,
+time,
+tr,
+tt,
+u,
+ul,
+var,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  vertical-align: baseline;
+  word-break: break-word;
+}
+
+body {
+  max-width: 920px;
+  margin: auto;
+}
+
+a {
+  color: rgb(34, 34, 34);
+  text-decoration: none;
+  outline: none;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+[role="link"] {
+  cursor: pointer;
+}
+
+@import "bp-icon-font";
+@import "bilibili";

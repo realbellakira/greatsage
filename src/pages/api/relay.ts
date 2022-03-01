@@ -3,7 +3,7 @@ import Pusher from 'pusher'
 
 import {PUSHER_APPID, PUSHER_KEY, PUSHER_SECRET, PUSHER_CLUSTER, BILIBILI_UIDS} from 'src/libs/settings'
 import useRedis from 'src/libs/redis'
-import {getLatestSagesFromRedisByID} from 'src/libs/sage'
+import {getLatestSagesFromRedisByID} from 'src/libs/sageredis'
 
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
