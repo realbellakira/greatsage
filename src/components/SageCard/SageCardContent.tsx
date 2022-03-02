@@ -4,6 +4,7 @@ import bilibiliNumberFormat from 'src/libs/bilibilinumberformat'
 import {IProps} from './SageSpecs'
 import BilibiliTextRender from '../BilibiliTextRender'
 import OpenInNewTab from '../OpenInNewTab'
+import {formatOriginSageAction} from 'src/libs/sageformat'
 
 
 export default function SageCardContent ({sage}: IProps) {
@@ -67,7 +68,7 @@ function SageCardOriginalVideoCardContent ({sage}: IProps) {
 
     return (
         <>
-            <SageCardTextDescription content={sage.content.dynamic} />
+            {!!sage.content.dynamic && <SageCardTextDescription content={sage.content.dynamic} />}
             <div className="video-container can-hover">
                 <a href={sage.content.url} target="_blank">
                     <div className="video-wrap">
@@ -132,13 +133,7 @@ function SageCardOriginalRepostCardContent ({sage}: IProps) {
                 <a className="username up-info-name" href={sage.originSage.user.url} target="_blank">
                     {sage.originSage.user.name}
                 </a>
-                <span className="up-info-tip">的{{
-                    video: '投稿视频',
-                    article: '文章',
-                    image: '图片',
-                    text: '动态',
-                    repost: '动态',
-                }[sage.originSage.type]}</span>
+                <span className="up-info-tip">{formatOriginSageAction(sage)}</span>
             </div>
             <OpenInNewTab href={sage.originSage.url}>
                 <SageCardOriginalRepostedCardContent sage={sage.originSage} />

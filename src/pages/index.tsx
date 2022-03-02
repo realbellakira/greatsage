@@ -1,14 +1,17 @@
 
 import {useEffect, useState} from 'react'
-import usePusher from 'src/libs/usePusher'
 
+import usePusher from 'src/libs/usePusher'
+import useNotification from 'src/libs/useNotification'
 import type {ISage} from 'src/libs/sage'
+import {formatSageAction, formatSageNotification} from 'src/libs/sageformat'
 import SageCard from 'src/components/SageCard'
 
 
 export default function Index () {
     const [lastTimeStamp, setLastTimeStamp] = useState('')
     const [sages, setSages] = useState<ISage[]>([])
+    const $notificationService = useNotification()
 
     useEffect(() => {
         fetch('/api/relay').then(r => r.json()).then(({timestamp, value}) => {
@@ -19,10 +22,16 @@ export default function Index () {
 
     usePusher(({event, data}) => {
         if (event === 'new') {
-            alert(JSON.stringify(data))
+            const sage: ISage = data
+
+            // TODO: @sy animation for list rendering
+            setSages(prev => [sage, ...prev])
+            $notificationService.current?.showNotification(
+                formatSageAction(sage),
+                formatSageNotification(sage)
+            )
         }
     })
-
 
     return (
         <div>
