@@ -163,6 +163,13 @@
   dependencies:
     chalk "^4.0.0"
 
+"@csszen/hooks.useintersectionobserver@^0.2.0":
+  version "0.2.0"
+  resolved "https://node.bit.dev/@csszen/hooks.useintersectionobserver/-/@csszen-hooks.useintersectionobserver-0.2.0.tgz#46b3804f529d5db4bd0c361a63478238f920e675"
+  integrity sha1-RrOAT1KdXbS9DDYaY0eCOPkg5nU=
+  dependencies:
+    core-js "^3.0.0"
+
 "@endemolshinegroup/cosmiconfig-typescript-loader@^3.0.2":
   version "3.0.2"
   resolved "https://registry.npmjs.org/@endemolshinegroup/cosmiconfig-typescript-loader/-/cosmiconfig-typescript-loader-3.0.2.tgz#eea4635828dde372838b0909693ebd9aafeec22d"
@@ -554,6 +561,11 @@ conventional-commits-parser@^3.2.2:
     meow "^8.0.0"
     split2 "^3.0.0"
     through2 "^4.0.0"
+
+core-js@^3.0.0:
+  version "3.21.1"
+  resolved "https://registry.npmjs.org/core-js/-/core-js-3.21.1.tgz#f2e0ddc1fc43da6f904706e8e955bc19d06a0d94"
+  integrity sha512-FRq5b/VMrWlrmCzwRrpDYNxyHP9BcAZC+xHJaqTgIE5091ZV1NTmyh0sGOg5XqpnHvR0svdy0sv1gWA1zmhxig==
 
 cosmiconfig@^7.0.0:
   version "7.0.1"

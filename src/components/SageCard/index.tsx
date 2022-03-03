@@ -1,15 +1,36 @@
 
+import {useRef} from 'react'
+
 import {IProps} from './SageSpecs'
 import SageCardTimestamp from './SageCardTimestamp'
 import SageCardContent from './SageCardContent'
 import SageCardButtonBar from './SageCardButtonBar'
+import useInterSectionObserver from '@csszen/hooks.useintersectionobserver'
 
 
-export default function SageCard ({sage}: IProps) {
+interface ICardProps extends IProps {
+    className?: string
+    onViewed?: (id: string) => void
+}
+
+export default function SageCard ({sage, className = '', onViewed}: ICardProps) {
     const {user} = sage
+    const viewed = useRef(false)
+
+    const $anchor = useInterSectionObserver<HTMLDivElement>(entry => {
+        if (entry.isIntersecting) {
+            if (viewed.current) {
+                if (onViewed) onViewed(sage.id)
+            } else {
+                viewed.current = true
+            }
+        }
+    }, {
+        threshold: Array.from(Array(100), (_, i) => i / 100),
+    })
 
     return (
-        <div className="card">
+        <div ref={$anchor} className={`card ${className}`}>
             <a className="user-head">
                 <div className="bili-avatar">
                     <img className="bili-avatar-img bili-avatar-face bili-avatar-img-radius" src={user.avatar} />
