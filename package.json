@@ -11,6 +11,7 @@
     "husky": "husky install"
   },
   "dependencies": {
+    "@csszen/hooks.useintersectionobserver": "^0.2.0",
     "next": "12.1.0",
     "pusher": "5.0.1",
     "pusher-js": "7.0.6",

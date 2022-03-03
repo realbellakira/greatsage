@@ -17,19 +17,24 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const sageGroups = await getSages()
 
-    sageGroups.forEach(([sages]) => sages.forEach(sage => pusher.trigger('sage', 'new', {
-        message: sage,
-    })))
     const value = (sageGroups
         .map(([, sages]) => sages)
         .reduce((r, sages) => r.concat(sages), [])
         .sort((l, r) => l.timestamp - r.timestamp)
     )
 
+    sageGroups.forEach(([sages]) => sages.forEach(sage => pusher.trigger('sage', 'new', {
+        message: {
+            timestamp: new Date(),
+            sages: value,
+            sage,
+        },
+    })))
+
     // tslint:disable-next-line: no-magic-numbers
     return res.status(200).send({
         timestamp: new Date(),
-        value,
+        sages: value,
     })
 }
 
