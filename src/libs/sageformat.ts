@@ -8,6 +8,7 @@ export function formatSageAction (sage: ISage) {
         article: '发布了文章',
         image: '发布了图片',
         text: '发布了动态',
+        audio: '发布了音频',
         repost: `转发了${sage.originSage?.user?.name || ''}${formatOriginSageAction(sage)}`,
     }[sage.type]
 
@@ -23,6 +24,7 @@ export function formatOriginSageAction (sage: ISage) {
         image: '图片',
         text: '动态',
         repost: '动态',
+        audio: '音频',
     }[sage.originSage.type]}`
 }
 
