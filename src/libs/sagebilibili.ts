@@ -47,7 +47,9 @@ function serializeBilibiliSageStats (rawSage: ANY): ISage['stats'] {
         ? rawSage.card.stat.reply
         : type === 'article'
             ? rawSage.card.stats.reply
-            : rawSage.desc.comment
+            : type === 'audio'
+                ? rawSage.card.replyCnt
+                : rawSage.desc.comment
 
     return {
         repost,
@@ -66,6 +68,7 @@ function serializeBilibiliSageType (rawSage: ANY): ISage['type'] {
     if (type === 8 || type === 16) return 'video'
     // tslint:disable-next-line: no-magic-numbers
     if (type === 64) return 'article'
+    if (type === 256) return 'audio'
     return 'text'
 }
 
@@ -102,6 +105,16 @@ function serializeBilibiliSageCard (type: ISage['type'], card: ANY): ISage['cont
             like: card.stat.like,
             coin: card.stat.coin,
         },
+    }
+    if (type === 'audio') return {
+        title: card.title,
+        dynamic: card.intro,
+        description: card.typeInfo,
+        picture: card.cover,
+        stats: {
+            play: card.playCnt,
+            comment: card.replyCnt,
+        }
     }
 
     return {

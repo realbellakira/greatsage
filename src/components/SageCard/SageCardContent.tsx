@@ -24,25 +24,8 @@ function SageCardOriginalCardContent ({sage}: IProps) {
     if (sage.type === 'text') return <SageCardTextDescription content={sage.content.content} />
     if (sage.type === 'image') return <SageCardOriginalImageCardContent sage={sage} />
     if (sage.type === 'video') return <SageCardOriginalVideoCardContent sage={sage} />
-
-    if (sage.type === 'article') return (
-        <div className="article-container">
-            <a href={sage.content.url} target="_blank">
-                <div>
-                    {/* // TODO: @sy render multiple pictures */}
-                    <div className="images-area">
-                        <img src={sage.content.pictures[0]} className="card-1" />
-                    </div>
-                </div>
-                <div className="text-area">
-                    <div className="title">{sage.content.title}</div>
-                    <div className="content">
-                        {sage.content.content}
-                    </div>
-                </div>
-            </a>
-        </div>
-    )
+    if (sage.type === 'article') return <SageCardOriginalArticleCardContent sage={sage} />
+    if (sage.type === 'audio') return <SageCardOriginalAudioCardContent sage={sage} />
 
     if (sage.type === 'repost') return <SageCardOriginalRepostCardContent sage={sage} />
 
@@ -88,6 +71,52 @@ function SageCardOriginalVideoCardContent ({sage}: IProps) {
                                     <span className="danmaku">{bilibiliNumberFormat(sage.content.stats?.danmaku)}</span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </>
+    )
+}
+
+function SageCardOriginalArticleCardContent ({sage}: IProps) {
+    if (sage.type !== 'article') return null
+
+    return (
+        <div className="article-container">
+            <a href={sage.content.url} target="_blank">
+                <div>
+                    {/* // TODO: @sy render multiple pictures */}
+                    <div className="images-area">
+                        <img src={sage.content.pictures[0]} className="card-1" />
+                    </div>
+                </div>
+                <div className="text-area">
+                    <div className="title">{sage.content.title}</div>
+                    <div className="content">
+                        {sage.content.content}
+                    </div>
+                </div>
+            </a>
+        </div>
+    )
+}
+
+function SageCardOriginalAudioCardContent ({sage}: IProps) {
+    if (sage.type !== 'audio') return null
+
+    return (
+        <>
+            <SageCardTextDescription content={sage.content.dynamic} />
+            <div className="audio-container can-hover">
+                <a href={'https://www.bilibili.com/audio/au' + sage.originSage?.card?.id} target="_blank">
+                    <div className="audio-wrap">
+                        <div className="image-area">
+                            <img src={sage.content.picture} alt="" />
+                        </div>
+                        <div className="text-area">
+                            <div className="title">{sage.content.title}</div>
+                            <div className="content">{sage.content.description}</div>
                         </div>
                     </div>
                 </a>

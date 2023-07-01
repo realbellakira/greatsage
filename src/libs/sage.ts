@@ -6,14 +6,14 @@
  */
 
 
-export type ISage = IRepostSage | ITextSage | IImageSage | IVideoSage | IArticleSage
+export type ISage = IRepostSage | ITextSage | IImageSage | IVideoSage | IArticleSage | IAudioSage
 
 interface IBaseSage {
     id: string
     url: string
     user: ISageUser
     timestamp: number
-    type: 'repost' | 'text' | 'image' | 'video' | 'article'
+    type: 'repost' | 'text' | 'image' | 'video' | 'article' | 'audio'
     stats: {
         repost: number
         like: number
@@ -61,6 +61,20 @@ interface IVideoSage extends IBaseSage {
             danmaku: number
             like: number
             coin: number
+        }
+    }
+}
+
+interface IAudioSage extends IBaseSage {
+    type: 'audio'
+    content: {
+        title: string
+        dynamic: string
+        description: string
+        picture: string
+        stats: {
+            play: number
+            comment: number
         }
     }
 }
