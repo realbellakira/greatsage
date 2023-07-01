@@ -375,7 +375,8 @@
   }
 }
 
-.video-container {
+.video-container,
+.audio-container {
   width: 520px;
   height: 127px;
   background: #fff;
@@ -492,6 +493,25 @@
           margin-right: 4px;
         }
       }
+    }
+  }
+}
+
+.audio-container {
+  height: 80px;
+
+  .image-area {
+    width: 80px;
+    height: 100%;
+  }
+
+  .text-area {
+    .title {
+      margin-top: 16px;
+    }
+    .title,
+    .content {
+      height: unset;
     }
   }
 }
