@@ -94,7 +94,7 @@ function serializeBilibiliSageCard (type: ISage['type'], card: ANY): ISage['cont
         description: card.desc,
         dynamic: card.dynamic,
         picture: card.pic,
-        url: card.short_link,
+        url: card.short_link_v2,
         duration: card.duration,
         stats: {
             view: card.stat.view,
