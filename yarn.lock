@@ -1327,10 +1327,10 @@ postcss@8.4.31:
     picocolors "^1.0.0"
     source-map-js "^1.0.2"
 
-pusher-js@8.3.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/pusher-js/-/pusher-js-8.3.0.tgz#a40d76c373a56ba8b3de2c55414380cb49975207"
-  integrity sha512-6GohP06WlVeomAQQe9qWh1IDzd3+InluWt+ZUOcecVK1SEQkg6a8uYVsvxSJm7cbccfmHhE0jDkmhKIhue8vmA==
+pusher-js@8.6.0:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/pusher-js/-/pusher-js-8.6.0.tgz#933e924f59938b31e2e9eb41af9c8b6bf9932f6b"
+  integrity sha512-wShJPfCS/kYkCBVzVW67wa9cnQIgHTszEK2XHNrFkOgGruuGw081aERAxfRjfdFU+WcIt8x6dvbwkTW4iZuQ8Q==
   dependencies:
     tweetnacl "^1.0.3"
 
